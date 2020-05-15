@@ -1,0 +1,94 @@
+/*
+  Name: Justin Clayton
+  Date: May 3, 2020
+  Section: CSE 154 AD
+  This is the main CSS style document and contains all the rules to get a consistent look and feel
+  for the web page design. Additionally, it defines the class rules for cards which will be created
+  when the user requests songs and handles styling of feedback messages to the user.
+*/
+
+/* HTML Selector Rules */
+body {
+  font-family: "Roboto Slab", monospace;
+  margin: 0;
+}
+
+footer {
+  color: white;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}
+
+footer p {
+  margin: 0;
+  padding: 5px 50px;
+}
+
+footer, header {
+  background: linear-gradient(90deg, rgba(87, 68, 56, 1) 31%, rgb(153, 139, 122) 100%);
+}
+
+h2 {
+  text-align: center;
+}
+
+header img {
+  height: 35px;
+  margin-right: 5px;
+}
+
+main {
+  margin: 0 auto;
+  width: 80%;
+}
+
+nav a {
+  font-size: 1.4rem;
+  margin-left: 20px;
+}
+
+section {
+  margin: 50px 0;
+}
+
+/* Class Rules */
+.hidden {
+  display: none;
+}
+
+.jumbotron {
+  padding: 0;
+}
+
+.jumbotron > div {
+  background-image: url("./assets/bean-gradient.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 100px;
+  height: 300px;
+}
+
+.jumbotron > div > h2 {
+  background-color: rgba(72, 62, 117, 0.952);
+  color: white;
+}
+
+.jumbotron > article {
+  font-size: 1.3rem;
+  padding: 20px 34px 68px 34px;
+}
+
+.navbar-brand {
+  font-size: 2.2rem;
+}
+
+.navbar-nav {
+  flex-direction: row;
+}
+
+/* ID Rules */
+#about-page article p {
+  text-indent: 50px;
+}
