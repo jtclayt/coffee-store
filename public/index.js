@@ -14,30 +14,111 @@
   window.addEventListener('load', init);
 
   let activePage;
+  let shopItems = {
+    'coffee1': {
+      id: 'coffee1',
+      name: 'Beans',
+      desc: 'These are some delicious beans right here',
+      price: 25,
+      src: './assets/some-beans.jpg',
+      alt: 'some roasted beans'
+    }
+  };
 
-  /**  */
+  /** Sets up pages and user interaction links and buttons. */
   function init() {
     activePage = 'home';
-    let links = qsa('nav a');
+    let links = qsa('#page-nav a');
     links.forEach(link => {
       link.addEventListener('click', (event) => {
         event.preventDefault();
-        onNav(event.currentTarget);
+        onPageNav(event.currentTarget);
       });
     });
+    populateShop();
   }
 
   // Event listeners
+  /** */
+  function onBuy() {
+    console.log(this.id);
+  }
+
   /**
-   *
+   * Controls which page is displayed to the user.
    * @param {object} link - The link that was clicked.
    */
-  function onNav(link) {
+  function onPageNav(link) {
     id(activePage).classList.remove('active');
     id(`${activePage}-page`).classList.add('hidden');
     link.classList.add('active');
     activePage = link.id;
     id(`${activePage}-page`).classList.remove('hidden');
+  }
+
+  // Website Helper Functions
+  /**
+   *
+   * @param {object} item - Object with item information for building an item.
+   */
+  function createShopItem(item) {
+    let card = gen('figure');
+    let img = gen('img');
+    let fig = createShopItemBody(item);
+    card.classList.add('card');
+    img.classList.add('card-img-top');
+    img.src = item.src;
+    img.alt = item.alt;
+    card.appendChild(img);
+    card.appendChild(fig);
+    id('item-container').appendChild(card);
+  }
+
+  /**
+   *
+   * @param {object} item - Object with item information for building an item.
+   * @return {object} The HTML figcation object for a shop item.
+   */
+  function createShopItemBody(item) {
+    let fig = gen('figcaption');
+    let name = gen('h3');
+    let desc = gen('p');
+    let price = gen('p');
+    let buyBtn = gen('button');
+    fig.classList.add('card-body');
+    name.classList.add('card-title');
+    desc.classList.add('card-text');
+    price.classList.add('card-text');
+    buyBtn.classList.add('btn');
+    buyBtn.classList.add('btn-primary');
+    name.textContent = item.name;
+    desc.textContent = item.description;
+    price.textContent = `$${item.price}`;
+    buyBtn.id = `${item.id}`;
+    buyBtn.textContent = 'Add to cart';
+    buyBtn.addEventListener('click', onBuy);
+    fig.appendChild(name);
+    fig.appendChild(desc);
+    fig.appendChild(price);
+    fig.appendChild(buyBtn);
+    return fig;
+  }
+
+  /** */
+  function populateShop() {
+    for (let i = 0; i < 5; i++) {
+      shopItems[`coffee${i}`] = {
+        id: `coffee${i}`,
+        name: 'Beans',
+        description: 'These are some delicious beans right here',
+        price: 25,
+        src: './assets/some-beans.jpg',
+        alt: 'some roasted beans'
+      };
+    }
+    for (let key in shopItems) {
+      createShopItem(shopItems[key]);
+    }
   }
 
   // Given Helper functions

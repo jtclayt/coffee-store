@@ -9,6 +9,7 @@
   <head>
     <meta charset="utf-8">
     <title>CP3: Fetch</title>
+    <link rel="icon" href="./assets/logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -23,10 +24,14 @@
       -->
       <img src="assets/logo.png">
       <h1 class="navbar-brand">PF Roasting</h1>
-      <nav class="navbar-nav mr-auto">
+      <nav class="navbar-nav mr-auto" id="page-nav">
         <a class="nav-link active" href="#home" id="home">Home</a>
         <a class="nav-link" href="#store" id="store">Store</a>
         <a class="nav-link" href="#about" id="about">About</a>
+      </nav>
+      <nav class="navbar-nav" id="modal-nav">
+        <a class="nav-link" href="#cart" id="cart">Your Cart (<span id="cart-count">0</span>)</a>
+        <a class="nav-link" href="#orders" id="orders">Your Orders</a>
       </nav>
     </header>
     <main>
@@ -54,7 +59,27 @@
       </section>
 
       <section class="hidden" id="store-page">
-        <h2>Store</h2>
+        <h2>Our Online Store</h2>
+        <div>
+          <ul class="list-group">
+            <li id="all" class="list-group-item selected">
+              All (<span id="all-count">0</span>)
+            </li>
+            <li id="coffee" class="list-group-item">
+              Coffee (<span id="bean-count">0</span>)
+            </li>
+            <li id="grinders" class="list-group-item">
+              Grinders (<span id="grind-count">0</span>)
+            </li>
+            <li id="brewers" class="list-group-item">
+              Brewers (<span id="all-count">0</span>)
+            </li>
+            <li id="Mugs" class="list-group-item">
+              Mugs (<span id="all-count">0</span>)
+            </li>
+          </ul>
+          <div id="item-container"></div>
+        </div>
       </section>
 
       <section class="hidden" id="about-page">

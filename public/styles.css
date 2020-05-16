@@ -54,6 +54,11 @@ section {
 }
 
 /* Class Rules */
+.card {
+  width: 18rem;
+  margin: 25px;
+}
+
 .hidden {
   display: none;
 }
@@ -66,13 +71,13 @@ section {
   background-image: url("./assets/bean-gradient.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  padding-top: 100px;
-  height: 300px;
+  padding-top: 175px;
+  height: 400px;
 }
 
 .jumbotron > div > h2 {
   background-color: rgba(72, 62, 117, 0.952);
-  color: white;
+  color: rgb(230, 227, 212);
 }
 
 .jumbotron > article {
@@ -88,7 +93,32 @@ section {
   flex-direction: row;
 }
 
+.selected {
+  background-color: #7262b7;
+}
+
 /* ID Rules */
 #about-page article p {
   text-indent: 50px;
+}
+
+#item-container {
+  width: 80%;
+  padding: 0 25px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#store-page > div {
+  display: flex;
+}
+
+#store-page ul {
+  width: 20%;
+}
+
+#store-page ul li:hover {
+  background-color: rgb(202, 190, 176);
 }
