@@ -8,10 +8,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>CP3: Fetch</title>
+    <title>CP4: API</title>
     <link rel="icon" href="./assets/logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <script src="index.js"></script>
   </head>
@@ -30,7 +30,9 @@
         <a class="nav-link" href="#about" id="about">About</a>
       </nav>
       <nav class="navbar-nav" id="modal-nav">
-        <a class="nav-link" href="#cart" id="cart">Your Cart (<span id="cart-count">0</span>)</a>
+        <a class="nav-link" href="#cart" id="cart" data-toggle="modal" data-target="#cart">
+          Your Cart (<span id="cart-count">0</span>)
+        </a>
         <a class="nav-link" href="#orders" id="orders">Your Orders</a>
       </nav>
     </header>
@@ -66,16 +68,19 @@
               All (<span id="all-count">0</span>)
             </li>
             <li id="coffee" class="list-group-item">
-              Coffee (<span id="bean-count">0</span>)
+              Coffee (<span id="coffee-count">0</span>)
             </li>
             <li id="grinders" class="list-group-item">
-              Grinders (<span id="grind-count">0</span>)
+              Grinders (<span id="grinders-count">0</span>)
             </li>
             <li id="brewers" class="list-group-item">
-              Brewers (<span id="all-count">0</span>)
+              Brewers (<span id="brewers-count">0</span>)
             </li>
-            <li id="Mugs" class="list-group-item">
-              Mugs (<span id="all-count">0</span>)
+            <li id="kettles" class="list-group-item">
+              Kettles (<span id="kettles-count">0</span>)
+            </li>
+            <li id="mugs" class="list-group-item">
+              Mugs (<span id="mugs-count">0</span>)
             </li>
           </ul>
           <div id="item-container"></div>

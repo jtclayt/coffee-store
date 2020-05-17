@@ -13,35 +13,42 @@
 (function() {
   window.addEventListener('load', init);
 
-  let activePage;
-  let shopItems = {
-    'coffee1': {
-      id: 'coffee1',
-      name: 'Beans',
-      desc: 'These are some delicious beans right here',
-      price: 25,
-      src: './assets/some-beans.jpg',
-      alt: 'some roasted beans'
-    }
-  };
+  let activePage = 'home';
+  let currentFilter = 'all';
+  let shopItems = {};
 
   /** Sets up pages and user interaction links and buttons. */
   function init() {
-    activePage = 'home';
-    let links = qsa('#page-nav a');
-    links.forEach(link => {
+    qsa('#page-nav a').forEach(link => {
       link.addEventListener('click', (event) => {
         event.preventDefault();
         onPageNav(event.currentTarget);
       });
     });
+    qsa('.list-group-item').forEach(filterBtn => {
+      filterBtn.addEventListener('click', onFilter);
+    });
     populateShop();
   }
 
   // Event listeners
-  /** */
+  /** Add an item to the cart when buy button is clicked. */
   function onBuy() {
     console.log(this.id);
+  }
+
+  /** Filter shown items when list is clicked. */
+  function onFilter() {
+    id(currentFilter).classList.remove('selected');
+    currentFilter = this.id;
+    id(currentFilter).classList.add('selected');
+    let qsaFilter = (this.id === 'all') ? '.card' : `.${this.id}`;
+    qsa('.card').forEach(card => {
+      card.classList.add('hidden');
+    });
+    qsa(qsaFilter).forEach(filteredCard => {
+      filteredCard.classList.remove('hidden');
+    });
   }
 
   /**
@@ -57,18 +64,38 @@
   }
 
   // Website Helper Functions
+  /** */
+  function addShopItems() {
+    id('item-container').innerHTML = '';
+    let total = 0;
+    for (let type in shopItems) {
+      let itemType = shopItems[type];
+      for (let item in itemType) {
+        let count = parseInt(id(`${type}-count`).textContent);
+        id(`${type}-count`).textContent = count + 1;
+        total++;
+        createShopItem(item, type);
+      }
+    }
+    id('all-count').textContent = total;
+  }
+
   /**
    *
-   * @param {object} item - Object with item information for building an item.
+   * @param {string} item - String of item id for current item.
+   * @param {string} type - The type of item for filtering.
    */
-  function createShopItem(item) {
+  function createShopItem(item, type) {
+    let itemData = shopItems[type][item];
     let card = gen('figure');
     let img = gen('img');
-    let fig = createShopItemBody(item);
+    let fig = createShopItemBody(item, itemData);
     card.classList.add('card');
+    card.classList.add(type);
+    card.id = item;
     img.classList.add('card-img-top');
-    img.src = item.src;
-    img.alt = item.alt;
+    img.src = itemData.src;
+    img.alt = itemData.alt;
     card.appendChild(img);
     card.appendChild(fig);
     id('item-container').appendChild(card);
@@ -76,10 +103,11 @@
 
   /**
    *
-   * @param {object} item - Object with item information for building an item.
+   * @param {string} item - String of item id for current item.
+   * @param {object} itemData - Object with item information for building item.
    * @return {object} The HTML figcation object for a shop item.
    */
-  function createShopItemBody(item) {
+  function createShopItemBody(item, itemData) {
     let fig = gen('figcaption');
     let name = gen('h3');
     let desc = gen('p');
@@ -91,10 +119,10 @@
     price.classList.add('card-text');
     buyBtn.classList.add('btn');
     buyBtn.classList.add('btn-primary');
-    name.textContent = item.name;
-    desc.textContent = item.description;
-    price.textContent = `$${item.price}`;
-    buyBtn.id = `${item.id}`;
+    name.textContent = itemData.name;
+    desc.textContent = itemData.desc;
+    price.textContent = `$${itemData.price}`;
+    buyBtn.id = `${item}`;
     buyBtn.textContent = 'Add to cart';
     buyBtn.addEventListener('click', onBuy);
     fig.appendChild(name);
@@ -106,19 +134,12 @@
 
   /** */
   function populateShop() {
-    for (let i = 0; i < 5; i++) {
-      shopItems[`coffee${i}`] = {
-        id: `coffee${i}`,
-        name: 'Beans',
-        description: 'These are some delicious beans right here',
-        price: 25,
-        src: './assets/some-beans.jpg',
-        alt: 'some roasted beans'
-      };
-    }
-    for (let key in shopItems) {
-      createShopItem(shopItems[key]);
-    }
+    fetch('/store')
+      .then(checkStatus)
+      .then(res => res.json())
+      .then(data => shopItems = data)
+      .then(addShopItems)
+      .catch(console.error);
   }
 
   // Given Helper functions
