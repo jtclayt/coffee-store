@@ -13,9 +13,19 @@
 (function() {
   window.addEventListener('load', init);
 
+  // Module global variables
+  const ITEM_TYPES = {
+    'c': 'coffee',
+    'g': 'grinders',
+    'b': 'brewers',
+    'k': 'kettles',
+    'm': 'mugs'
+  };
   let activePage = 'home';
   let currentFilter = 'all';
   let shopItems = {};
+  let cartItems = {};
+  let subtotal = 0;
 
   /** Sets up pages and user interaction links and buttons. */
   function init() {
@@ -29,12 +39,29 @@
       filterBtn.addEventListener('click', onFilter);
     });
     populateShop();
+    id('cart-btn').addEventListener('click', onOpenCart);
+    id('cancel-checkout').addEventListener('click', (event) => {
+      event.preventDefault();
+      onCancelCheckout();
+    });
   }
 
   // Event listeners
   /** Add an item to the cart when buy button is clicked. */
   function onBuy() {
-    console.log(this.id);
+    let item = this.id;
+    if (cartItems[item]) {
+      cartItems[item]++;
+    } else {
+      cartItems[item] = 1;
+    }
+    id('cart-count').textContent = parseInt(id('cart-count').textContent) + 1;
+    buildCartList();
+  }
+
+  /** Close the shopping cart dialog window. */
+  function onCancelCheckout() {
+    id('cart').removeAttribute('open');
   }
 
   /** Filter shown items when list is clicked. */
@@ -51,6 +78,11 @@
     });
   }
 
+  /** */
+  function onOpenCart() {
+    id('cart').setAttribute('open', "true");
+  }
+
   /**
    * Controls which page is displayed to the user.
    * @param {object} link - The link that was clicked.
@@ -64,7 +96,10 @@
   }
 
   // Website Helper Functions
-  /** */
+  /**
+   * Add all of the items to the card container, update the numbers of item
+   * types
+   */
   function addShopItems() {
     id('item-container').innerHTML = '';
     let total = 0;
@@ -78,6 +113,53 @@
       }
     }
     id('all-count').textContent = total;
+  }
+
+  /** Build the list of items to purchase in the cart view. */
+  function buildCartList() {
+    const TAX_RATE = 0.1;
+    let list = id('cart-list');
+    list.innerHTML = '';
+    subtotal = 0;
+    for (let itemId in cartItems) {
+      let listItem = createCartListItem(itemId);
+      list.append(listItem);
+    }
+    let taxAmount = roundTwoPlaces(subtotal * TAX_RATE);
+    let totalAmount = roundTwoPlaces(subtotal * (1 + TAX_RATE));
+    let listSubtotal = createListItem(`Subtotal: $${subtotal}`);
+    list.appendChild(listSubtotal);
+    let tax = createListItem(`Tax (10%): $${taxAmount}`);
+    list.appendChild(tax);
+    let total = createListItem(`Total: $${totalAmount}`);
+    list.appendChild(total);
+  }
+
+  /**
+   *
+   * @param {string} itemId - The item id to add to the list.
+   * @return {object} HTML li element object.
+   */
+  function createCartListItem(itemId) {
+    let itemQuantity = cartItems[itemId];
+    let itemType = ITEM_TYPES[itemId[0]];
+    let item = shopItems[itemType][itemId];
+    let price = itemQuantity * item.price;
+    subtotal += price;
+    let li = createListItem(`${item.name} (${itemQuantity}): $${price}`);
+    return li;
+  }
+
+  /**
+   *
+   * @param {string} text - Text to put in the list item.
+   * @return {object} HTML li element object.
+   */
+  function createListItem(text) {
+    let li = gen('li');
+    li.classList.add('list-group-item');
+    li.textContent = text;
+    return li;
   }
 
   /**
@@ -102,7 +184,7 @@
   }
 
   /**
-   *
+   * Create the body of an item card using the data retrieved.
    * @param {string} item - String of item id for current item.
    * @param {object} itemData - Object with item information for building item.
    * @return {object} The HTML figcation object for a shop item.
@@ -132,14 +214,21 @@
     return fig;
   }
 
-  /** */
+  /** Request current inventory data from store endpoint on server. */
   function populateShop() {
     fetch('/store')
       .then(checkStatus)
       .then(res => res.json())
-      .then(data => shopItems = data)
+      .then(data => {
+        shopItems = data;
+      })
       .then(addShopItems)
       .catch(console.error);
+  }
+
+  /** */
+  function roundTwoPlaces(amount) {
+    return Math.round((amount + Number.EPSILON) * 100) / 100;
   }
 
   // Given Helper functions

@@ -17,7 +17,7 @@
   </head>
 
   <body>
-    <header class="navbar navbar-dark">
+    <header class="navbar navbar-dark" id="heading">
       <!--
         Logo retrieved from:
         https://clipartlook.com/img-94197.html
@@ -30,12 +30,13 @@
         <a class="nav-link" href="#about" id="about">About</a>
       </nav>
       <nav class="navbar-nav" id="modal-nav">
-        <a class="nav-link" href="#cart" id="cart" data-toggle="modal" data-target="#cart">
+        <a class="nav-link" href="#cart" id="cart-btn">
           Your Cart (<span id="cart-count">0</span>)
         </a>
         <a class="nav-link" href="#orders" id="orders">Your Orders</a>
       </nav>
     </header>
+
     <main>
       <section id="home-page">
         <figure class="jumbotron">
@@ -62,7 +63,7 @@
 
       <section class="hidden" id="store-page">
         <h2>Our Online Store</h2>
-        <div>
+        <div class="flex">
           <ul class="list-group">
             <li id="all" class="list-group-item selected">
               All (<span id="all-count">0</span>)
@@ -83,8 +84,8 @@
               Mugs (<span id="mugs-count">0</span>)
             </li>
           </ul>
-          <div id="item-container"></div>
-        </div>
+        <div id="item-container" class="flex"></div>
+      </div>
       </section>
 
       <section class="hidden" id="about-page">
@@ -135,6 +136,71 @@
         </article>
       </section>
     </main>
+
+    <dialog id="cart">
+      <h2>Your Cart</h2>
+      <form id="payment-form" class="flex">
+        <div class="flex">
+          <section class="flex">
+            <h3>Your Orders</h3>
+            <ul class="list-group" id="cart-list">
+            </ul>
+          </section class="flex">
+          <section id="payment-info">
+            <p>Please create a user id if you do not have one yet.</p>
+            <p>
+              For a user id use letters and numbers only, no symbols or spaces.
+              User id can be used to get order status.
+            </p>
+            <p>
+              <strong>Note:</strong>
+              Please use only fake data to pass validation!
+            </p>
+            <p>
+              <label for="user">User Id: </label>
+              <input id="user" name="user" type="text" required
+                pattern="[A-Za-z0-9]*">
+            </p>
+            <p>
+              <label for="name">Name: </label>
+              <input id="name" name="name" type="text" required>
+            </p>
+            <p>
+              <label for="address">Address:</label>
+              <input id="address" name="address" type="text" required>
+            </p>
+            <p>
+              <label for="card-number">Card number:</label>
+              <input id="card-number" name="card-number" type="number"
+                min="1000000000000000" max="9999999999999999" required
+                placeholder="XXXXXXXXXXXXXXXX">
+            </p>
+            <p>
+              <label for="exp-month">Expiration Date:</label>
+              <input id="exp-month" name="exp-month" type="number" required
+                min="1" max="12" placeholder="MM">
+              /
+              <input id="exp-day" name="exp-day" type="number" required
+                min="19" max="25" placeholder="YY">
+            </p>
+            <p>
+              <label for="cvc">CVC/CVV:</label>
+              <input id="cvc" name="cvc" type="number" minlength="3"
+                maxlength="3" required placeholder="XXX">
+            </p>
+          </section>
+        </div>
+        <menu>
+          <button class="btn btn-danger" id="cancel-checkout">
+            Cancel
+          </button>
+          <button class="btn btn-success" id="checkout" type="submit">
+            Purchase
+          </button>
+        </menu>
+      </form>
+    </dialog>
+
     <footer>
       <p>
         Site &copy; 2020. Justin Clayton. Other attributions cited in document or page source.
