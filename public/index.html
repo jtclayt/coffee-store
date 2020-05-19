@@ -31,7 +31,6 @@
 -->
 <html lang="en">
   <head>
-    <meta charset="utf-8">
     <title>CP4: API</title>
     <link rel="icon" href="./assets/logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
@@ -169,7 +168,7 @@
             <h3>Your Orders</h3>
             <ul class="list-group" id="cart-list">
             </ul>
-          </section class="flex">
+          </section>
           <section id="payment-info">
             <p>Please create a user id if you do not have one yet.</p>
             <p>
@@ -205,16 +204,16 @@
                 min="1" max="12" placeholder="MM">
               /
               <input id="exp-year" name="exp-year" type="number" required
-                min="00" max="99" placeholder="YY">
+                min="0" max="99" placeholder="YY">
             </p>
             <p>
               <label for="cvc">CVC/CVV:</label>
-              <input id="cvc" name="cvc" type="number" minlength="3"
-                maxlength="3" required placeholder="XXX">
+              <input id="cvc" name="cvc" type="text" pattern="[0-9]{3}"
+                required placeholder="XXX">
             </p>
           </section>
         </div>
-        <menu>
+        <div id="btn-container">
           <button class="btn btn-danger" id="close-checkout-btn" type="button">
             Cancel
           </button>
@@ -224,7 +223,7 @@
           <button class="btn btn-success" id="checkout-btn" type="submit">
             Purchase
           </button>
-        </menu>
+        </div>
       </form>
     </dialog>
     <footer>

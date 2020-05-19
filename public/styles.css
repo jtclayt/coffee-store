@@ -14,7 +14,7 @@ body {
   font-family: "Roboto Slab", monospace;
 }
 
-body, footer p, h3, menu {
+body, footer p, h3, #btn-container {
   margin: 0;
 }
 
@@ -58,9 +58,13 @@ dialog form, dialog form div section, #item-container {
   align-items: center;
 }
 
+dialog form div section {
+  margin: 20px;
+}
+
 dialog form div section ul {
   width: 60%;
-  max-height: 45vh;
+  max-height: 50vh;
   overflow-y: scroll;
 }
 
@@ -82,7 +86,7 @@ footer, header {
   background: linear-gradient(90deg, rgba(87, 68, 56, 1) 31%, rgb(153, 139, 122) 100%);
 }
 
-h2, h3 {
+h2, h3, #btn-container {
   text-align: center;
 }
 
