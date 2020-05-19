@@ -8,29 +8,92 @@ const app = express();
 const multer = require('multer');
 const fs = require('fs').promises;
 const DEFAULT_PORT = 8000;
-const JSON_STORE_FILE = './shop-items.json';
+const JSON_STORE_FILE = './store-items.json';
+const JSON_ORDER_FILE = './orders.json';
+const CREATED = 201;
+const BAD_REQUEST = 400;
+const SERVER_ERROR = 500;
+let orders = loadOrders();
 
-// for application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: true}));
-
-// for application/json
 app.use(express.json());
-
-// for multipart/form-data (required with FormData)
 app.use(multer().none());
 
 /**
- * GET endpoint.
+ * Gets the available store items in the store-items.json file.
+ * Response type: json
+ * Sends a 500 error if something goes wrong in file-processing.
+ * Sends a success message otherwise.
  */
-app.use('/store', async (req, res) => {
-  let data = await fs.readFile(JSON_STORE_FILE, 'utf8');
-  data = JSON.parse(data);
-  res.type('json').send(data);
+app.get('/store', async (req, res) => {
+  try {
+    let data = await fs.readFile(JSON_STORE_FILE, 'utf8');
+    data = JSON.parse(data);
+    res.type('json').send(data);
+  } catch (err) {
+    res.type('text').status(SERVER_ERROR)
+      .send('Server error please try again later.');
+  }
 });
 
+/**
+ * Adds a new order to the current orders object and saves the data.
+ * This is obviously not a very secure solution but is for demonstration
+ * purposes only.
+ * Required POST parameters: user, name, address, card-number, exp-month
+ * exp-year, cvc.
+ * Response type: text/plain
+ * Sends a success message after order is created.
+ */
+app.post('/store', (req, res) => {
+  let {user, name, address, cvc, total} = req.body;
+  let cardNumber = req.body['card-number'];
+  let expDate = `${req.body['exp-month']}-${req.body['exp-year']}`;
+  let orderDate = new Date();
+  if (user && name && address && cardNumber && cvc && total && orderDate) {
+    let newOrder = {
+      name: name,
+      date: orderDate,
+      total: total,
+      address: address,
+      cardNumber: cardNumber,
+      expDate: expDate,
+      cvc: cvc
+    };
+    if (orders[user]) {
+      orders[user].push(newOrder);
+    } else {
+      orders[user] = [newOrder];
+    }
+    saveOrders();
+    res.type('text').status(CREATED)
+      .send('Order submitted. Thank you for ordering.');
+  } else {
+    res.type('text').status(BAD_REQUEST)
+      .send('Order not complete. Missing required information.');
+  }
+});
+
+// Helper functions
+/** Load orders from json file when server starts */
+async function loadOrders() {
+  try {
+    orders = await fs.readFile(JSON_ORDER_FILE, 'utf8');
+    orders = JSON.parse(orders);
+  } catch (err) {
+    orders = {};
+  }
+}
+
+/** Save the current orders to the orders.json file. */
+function saveOrders() {
+  fs.writeFile(JSON_ORDER_FILE, JSON.stringify(orders, undefined, 2));
+}
+
+// Define routes to folders used in index.html
 app.use('/assets', express.static(`${__dirname}/public/assets`));
-app.use('/jquery', express.static(`${__dirname}/node_modules/jquery/dist`));
 app.use('/bootstrap', express.static(`${__dirname}/node_modules/bootstrap/dist`));
+
 app.use(express.static('public'));
 const PORT = process.env.PORT || DEFAULT_PORT;
 app.listen(PORT);

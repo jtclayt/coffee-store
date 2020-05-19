@@ -2,9 +2,11 @@
   Name: Justin Clayton
   Date: May 3, 2020
   Section: CSE 154 AD
-  This is the main CSS style document and contains all the rules to get a consistent look and feel
-  for the web page design. Additionally, it defines the class rules for cards which will be created
-  when the user requests songs and handles styling of feedback messages to the user.
+  This is the main CSS style document and contains all the rules to get a
+  consistent look and feel for the web page design. The index.html page uses
+  Bootstrap so some of the rules in this page are to modify Bootstrap default
+  classes. Additionally, it defines the class rules for cards which contain the
+  details for a store item. It styles the cart dialog box.
 */
 
 /* HTML Selector Rules */
@@ -12,27 +14,24 @@ body {
   font-family: "Roboto Slab", monospace;
 }
 
-body, footer p {
+body, footer p, h3, menu {
   margin: 0;
 }
 
 dialog {
   top: 100px;
   width: 75%;
-  padding-top: 50px;
+  max-height: 50vw;
+  overflow-y: scroll;
+  padding-top: 25px;
   background-color: rgb(233, 229, 224);
   border: none;
   border-top: 10px solid rgb(175, 144, 144);
-  border-radius: 5%;
-  z-index: 5;
+  z-index: 3;
 }
 
 dialog, footer {
   position: fixed;
-}
-
-dialog form {
-  height: 90%;
 }
 
 dialog form, dialog form div, dialog form div section, footer {
@@ -40,11 +39,10 @@ dialog form, dialog form div, dialog form div section, footer {
 }
 
 dialog form button {
-  margin: 10px;
+  margin: 0 10px;
 }
 
-dialog form div {
-  height: 100%;
+dialog form div, #store-page > div {
   align-items: flex-start;
 }
 
@@ -64,6 +62,10 @@ dialog form div section ul {
   width: 60%;
   max-height: 45vh;
   overflow-y: scroll;
+}
+
+em {
+  font-size: 0.8rem;
 }
 
 footer {
@@ -108,8 +110,13 @@ section {
 
 /* Class Rules */
 .card {
-  width: 18rem;
-  margin: 25px;
+  width: 300px;
+  height: 460px;
+  margin: 15px;
+}
+
+.card-text:nth-of-type(1) {
+  height: 50px;
 }
 
 .flex {
@@ -167,6 +174,14 @@ section {
   width: 225px;
 }
 
+#cart-btn {
+  margin-right: 100px;
+}
+
+#cart-list {
+  max-height: 500px;
+}
+
 #cvc {
   width: 65px;
 }
@@ -175,9 +190,17 @@ section {
   width: 55px;
 }
 
+#heading {
+  top: 0;
+}
+
+#heading, #store-page ul {
+  position: sticky;
+  z-index: 2;
+}
+
 #item-container {
-  width: 79%;
-  padding: 0 1%;
+  width: 85%;
   flex-wrap: wrap;
 }
 
@@ -187,10 +210,12 @@ section {
 
 #payment-info {
   border-left: 2px solid rgb(175, 144, 144);
+  padding-left: 15px;
 }
 
 #store-page ul {
-  width: 20%;
+  top: 215px;
+  width: 15%;
 }
 
 #store-page ul li:hover {

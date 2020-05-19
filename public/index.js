@@ -2,12 +2,11 @@
  * Name: Justin Clayton
  * Date: May 3, 2020
  * Section: CSE 154 AD
- * This is the main JavaScript document for the CP3 webpage and contains all the logic to fetch
- * requested songs from the lyrics API. It handles errors if the song can not be found or a fetch
- * error occurs and if the user tries to make repeat requests. This page also handles setting up
- * the bar chart visulisation which is continuously updated on successful requests. When a request
- * is processed a card detailing the received data is dynamically generated or updated to display
- * some information to the user.
+ * This is the main JavaScript document for the CP4 webpage and contains all
+ * the logic to navigate the 'pages' on index.html. It sets all the user
+ * interface buttons and navigation and loads the store items from a GET
+ * request to app.js. It allows for adding items to the cart and then
+ * purchasing by making a POSt request to app.js.
  */
 'use strict';
 (function() {
@@ -21,11 +20,16 @@
     'k': 'kettles',
     'm': 'mugs'
   };
+  const MONEY = new Intl.NumberFormat(
+    'en-US',
+    {style: 'currency', currency: 'USD', minimumFractionDigits: 2}
+  );
   let activePage = 'home';
   let currentFilter = 'all';
   let shopItems = {};
   let cartItems = {};
   let subtotal = 0;
+  const TAX_RATE = 0.1;
 
   /** Sets up pages and user interaction links and buttons. */
   function init() {
@@ -39,11 +43,7 @@
       filterBtn.addEventListener('click', onFilter);
     });
     populateShop();
-    id('cart-btn').addEventListener('click', onOpenCart);
-    id('cancel-checkout').addEventListener('click', (event) => {
-      event.preventDefault();
-      onCancelCheckout();
-    });
+    setDialogWindow();
   }
 
   // Event listeners
@@ -59,8 +59,16 @@
     buildCartList();
   }
 
+  /** Clear items in the cart. */
+  function onClearCart() {
+    cartItems = {};
+    subtotal = 0;
+    id('cart-count').textContent = 0;
+    buildCartList();
+  }
+
   /** Close the shopping cart dialog window. */
-  function onCancelCheckout() {
+  function onCloseCheckout() {
     id('cart').removeAttribute('open');
   }
 
@@ -78,9 +86,32 @@
     });
   }
 
-  /** */
+  /** Handles opening the cart dialog. */
   function onOpenCart() {
     id('cart').setAttribute('open', "true");
+  }
+
+  /** Handles submitting the form for purchasing the items in the cart. */
+  function onPay() {
+    if (subtotal !== 0) {
+      let params = new FormData(id('payment-form'));
+      let expYear = parseInt(id('exp-year').value);
+      let expMonth = parseInt(id('exp-month').value);
+      params.append('total', subtotal * (1 + TAX_RATE));
+      if (checkExpiredCard(expYear, expMonth)) {
+        fetch('/store', {method: 'POST', body: params})
+          .then(checkStatus)
+          .then(res => res.text())
+          .then(handlePostRes)
+          .catch(handleError);
+      } else {
+        let alert = createAlert('danger', 'Card is expired.');
+        id('cart').insertBefore(alert, id('payment-form'));
+      }
+    } else {
+      let alert = createAlert('warning', 'Please add items to the cart first.');
+      id('cart').insertBefore(alert, id('payment-form'));
+    }
   }
 
   /**
@@ -117,7 +148,6 @@
 
   /** Build the list of items to purchase in the cart view. */
   function buildCartList() {
-    const TAX_RATE = 0.1;
     let list = id('cart-list');
     list.innerHTML = '';
     subtotal = 0;
@@ -125,18 +155,61 @@
       let listItem = createCartListItem(itemId);
       list.append(listItem);
     }
-    let taxAmount = roundTwoPlaces(subtotal * TAX_RATE);
-    let totalAmount = roundTwoPlaces(subtotal * (1 + TAX_RATE));
-    let listSubtotal = createListItem(`Subtotal: $${subtotal}`);
+    let subAmount = MONEY.format(subtotal);
+    let taxAmount = MONEY.format(subtotal * TAX_RATE);
+    let totalAmount = MONEY.format(subtotal * (1 + TAX_RATE));
+    let listSubtotal = createListItem(`Subtotal: ${subAmount}`);
     list.appendChild(listSubtotal);
-    let tax = createListItem(`Tax (10%): $${taxAmount}`);
+    let tax = createListItem(`Tax (10%): ${taxAmount}`);
     list.appendChild(tax);
-    let total = createListItem(`Total: $${totalAmount}`);
+    let total = createListItem(`Total: ${totalAmount}`);
     list.appendChild(total);
   }
 
   /**
-   *
+   * Checks whether a credit card has a valid card expiration date.
+   * @param {number} expYear - The card expiration year to check.
+   * @param {number} expMonth - The card expiration month to check.
+   * @return {boolean} If the card is not expired.
+   */
+  function checkExpiredCard(expYear, expMonth) {
+    const DATE = new Date();
+    const MILLENNIA_OFFSET = 2000;
+    const CURR_YEAR = DATE.getFullYear() - MILLENNIA_OFFSET;
+    const CURR_MONTH = DATE.getMonth() + 1;
+    let isValid1 = expYear > CURR_YEAR;
+    let isValid2 = (expYear === CURR_YEAR && expMonth > CURR_MONTH);
+    return isValid1 || isValid2;
+  }
+
+  /**
+   * Clear out an alert from the DOM after a set time.
+   * @param {object} alert - The object representing the alert to clear.
+   */
+  function clearAlert(alert) {
+    alert.remove();
+  }
+
+  /**
+   * Create a bootstrap style alert to display to the user.
+   * @param {string} alertType - The style of alert to display.
+   * @param {string} message - The message to display.
+   * @return {object} - Div object representing an alert.
+   */
+  function createAlert(alertType, message) {
+    let alert = gen('div');
+    const DISPLAY_TIMER = 10000;
+    alert.classList.add('alert');
+    alert.classList.add(`alert-${alertType}`);
+    alert.textContent = message;
+    setTimeout(() => {
+      clearAlert(alert);
+    }, DISPLAY_TIMER);
+    return alert;
+  }
+
+  /**
+   * Builds one list item for the cart view.
    * @param {string} itemId - The item id to add to the list.
    * @return {object} HTML li element object.
    */
@@ -146,12 +219,13 @@
     let item = shopItems[itemType][itemId];
     let price = itemQuantity * item.price;
     subtotal += price;
-    let li = createListItem(`${item.name} (${itemQuantity}): $${price}`);
+    let text = `${item.name} (${itemQuantity}): ${MONEY.format(price)}`;
+    let li = createListItem(text);
     return li;
   }
 
   /**
-   *
+   * Builds a generic list item with given text content.
    * @param {string} text - Text to put in the list item.
    * @return {object} HTML li element object.
    */
@@ -163,7 +237,7 @@
   }
 
   /**
-   *
+   * Create one store item card adding all the needed data to display.
    * @param {string} item - String of item id for current item.
    * @param {string} type - The type of item for filtering.
    */
@@ -214,6 +288,26 @@
     return fig;
   }
 
+  /**
+   * If an error occurs from GET/POST request.
+   * @param {string} message - Error message from response.
+   */
+  function handleError(message) {
+    let alert = createAlert('danger', message);
+    qs('main').prepend(alert);
+  }
+
+  /**
+   * When a post request is made to the
+   * @param {string} res - The text message from the server.
+   */
+  function handlePostRes(res) {
+    onClearCart();
+    let alert = createAlert('success', res);
+    qs('main').prepend(alert);
+    onCloseCheckout();
+  }
+
   /** Request current inventory data from store endpoint on server. */
   function populateShop() {
     fetch('/store')
@@ -223,12 +317,21 @@
         shopItems = data;
       })
       .then(addShopItems)
-      .catch(console.error);
+      .catch(handleError);
   }
 
-  /** */
-  function roundTwoPlaces(amount) {
-    return Math.round((amount + Number.EPSILON) * 100) / 100;
+  /** Set up the event listeners for the dialog windows. */
+  function setDialogWindow() {
+    id('cart-btn').addEventListener('click', onOpenCart);
+    id('clear-cart-btn').addEventListener('click', onClearCart);
+    id('close-checkout-btn').addEventListener('click', (event) => {
+      event.preventDefault();
+      onCloseCheckout();
+    });
+    id('payment-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      onPay();
+    });
   }
 
   // Given Helper functions

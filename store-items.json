@@ -1,0 +1,110 @@
+{
+  "coffee": {
+    "c1": {
+      "name": "French Roast",
+      "desc": "A traditional dark roast; smokey and sweet",
+      "price": 16,
+      "src": "./assets/french-roast.png",
+      "alt": "bag of french roast coffee"
+    },
+    "c2": {
+      "name": "Viking Blend",
+      "desc": "Blend of 60% Sumatra and 40% French Roast",
+      "price": 18,
+      "src": "./assets/viking.png",
+      "alt": "bag of Viking coffee blend"
+    },
+    "c3": {
+      "name": "Valkyrie Blend",
+      "desc": "Specialty blend of Sumatra and Ethiopian Harrar",
+      "price": 18,
+      "src": "./assets/valkyrie.png",
+      "alt": "bag of Valkyrie coffee blend"
+    },
+    "c4": {
+      "name": "Sumatra",
+      "desc": "Medium roast rich, full-bodied and earthly",
+      "price": 20,
+      "src": "./assets/sumatra.png",
+      "alt": "bag of sumatra coffee"
+    }
+  },
+  "grinders": {
+    "g1": {
+      "name": "Javapresse",
+      "desc": "Portable manual grinder",
+      "price": 43.99,
+      "src": "./assets/javapresse.jpg",
+      "alt": "manual metal coffee grinder"
+    },
+    "g2": {
+      "name": "Manual Ceramic",
+      "desc": "Ceramic burr grinder for good quality grinds on a budget",
+      "price": 23.99,
+      "src": "./assets/manual-ceramic.jpg",
+      "alt": "manual glass/ceramic coffee grinder"
+    },
+    "g3": {
+      "name": "Capresso Infinity",
+      "desc": "Top tier grinder for those who really want a fine grind",
+      "price": 129.54,
+      "src": "./assets/capresso.jpg",
+      "alt": "capresso coffee grinder"
+    }
+  },
+  "brewers": {
+    "b1": {
+      "name": "Aeropress",
+      "desc": "Quick and cheap press for espresso style coffee",
+      "price": 29.99,
+      "src": "./assets/aeropress.jpg",
+      "alt": "aeropress coffee maker"
+    },
+    "b2": {
+      "name": "Chemex",
+      "desc": "Make some delicous coffee with this stylish pourover",
+      "price": 47.95,
+      "src": "./assets/chemex.jpg",
+      "alt": "chemex pourover coffee maker"
+    }
+  },
+  "kettles": {
+    "k1": {
+      "name": "Bonavita Kettle",
+      "desc": "Electric kettle",
+      "price": 43.99,
+      "src": "./assets/bonavita.jpg",
+      "alt": "some roasted beans"
+    },
+    "k2": {
+      "name": "Stovetop Kettle",
+      "desc": "A standard stovetop kettle",
+      "price": 23.99,
+      "src": "./assets/stovetop-kettle.jpg",
+      "alt": "stovetop kettle"
+    }
+  },
+  "mugs": {
+    "m1": {
+      "name": "Metropole Mug",
+      "desc": "Mug from the Metropole hotel in Hanoi, Vietnam",
+      "price": 14.99,
+      "src": "./assets/hanoi-mug.png",
+      "alt": "black coffee mug"
+    },
+    "m2": {
+      "name": "PNSN Mug",
+      "desc": "Mug from the Pacific Northwest Seismic Network",
+      "price": 11.99,
+      "src": "./assets/pnsn-mug.png",
+      "alt": "white coffee mug"
+    },
+    "m3": {
+      "name": "Ram Horn Mug",
+      "desc": "Drink coffee like a Viking",
+      "price": 13.99,
+      "src": "./assets/horn-mug.png",
+      "alt": "ram horn mug"
+    }
+  }
+}
