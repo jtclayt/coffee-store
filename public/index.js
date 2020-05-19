@@ -99,6 +99,7 @@
       let expMonth = parseInt(id('exp-month').value);
       params.append('total', subtotal * (1 + TAX_RATE));
       if (checkExpiredCard(expYear, expMonth)) {
+        onCloseCheckout();
         fetch('/store', {method: 'POST', body: params})
           .then(checkStatus)
           .then(res => res.text())
@@ -290,10 +291,10 @@
 
   /**
    * If an error occurs from GET/POST request.
-   * @param {string} message - Error message from response.
+   * @param {string} error - Error from response.
    */
-  function handleError(message) {
-    let alert = createAlert('danger', message);
+  function handleError(error) {
+    let alert = createAlert('danger', error.message);
     qs('main').prepend(alert);
   }
 
@@ -305,7 +306,6 @@
     onClearCart();
     let alert = createAlert('success', res);
     qs('main').prepend(alert);
-    onCloseCheckout();
   }
 
   /** Request current inventory data from store endpoint on server. */
@@ -332,6 +332,7 @@
       event.preventDefault();
       onPay();
     });
+    buildCartList();
   }
 
   // Given Helper functions

@@ -11,15 +11,6 @@
     },
     {
       "name": "justin",
-      "date": "2020-05-19T19:43:25.533Z",
-      "total": "17.6",
-      "address": "a place",
-      "cardNumber": "1111111111111111",
-      "expDate": "11-21",
-      "cvc": "111"
-    },
-    {
-      "name": "justin",
       "date": "2020-05-19T20:00:25.537Z",
       "total": "65.989",
       "address": "not a place",

@@ -43,14 +43,15 @@ app.get('/store', async (req, res) => {
  * Required POST parameters: user, name, address, card-number, exp-month
  * exp-year, cvc.
  * Response type: text/plain
- * Sends a success message after order is created.
+ * Sends 400 if the cvc is invalid (ie 000).
+ * Sends 201 created message after order is created.
  */
 app.post('/store', (req, res) => {
   let {user, name, address, cvc, total} = req.body;
   let cardNumber = req.body['card-number'];
   let expDate = `${req.body['exp-month']}-${req.body['exp-year']}`;
-  let orderDate = new Date();
-  if (user && name && address && cardNumber && cvc && total && orderDate) {
+  if (user && name && address && cardNumber && cvc !== '000' && total) {
+    let orderDate = new Date();
     let newOrder = {
       name: name,
       date: orderDate,
