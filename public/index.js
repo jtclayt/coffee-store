@@ -49,12 +49,19 @@
   // Event listeners
   /** Add an item to the cart when buy button is clicked. */
   function onBuy() {
+    const COLOR_TIMER = 500;
     let item = this.id;
     if (cartItems[item]) {
       cartItems[item]++;
     } else {
       cartItems[item] = 1;
     }
+    this.classList.remove('btn-primary');
+    this.classList.add('btn-success');
+    setTimeout(() => {
+      this.classList.remove('btn-success');
+      this.classList.add('btn-primary');
+    }, COLOR_TIMER);
     id('cart-count').textContent = parseInt(id('cart-count').textContent) + 1;
     buildCartList();
   }
