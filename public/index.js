@@ -100,7 +100,7 @@
       params.append('total', subtotal * (1 + TAX_RATE));
       if (checkExpiredCard(expYear, expMonth)) {
         onCloseCheckout();
-        fetch('/store', {method: 'POST', body: params})
+        fetch('/order', {method: 'POST', body: params})
           .then(checkStatus)
           .then(res => res.text())
           .then(handlePostRes)

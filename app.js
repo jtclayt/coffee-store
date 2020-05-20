@@ -46,7 +46,7 @@ app.get('/store', async (req, res) => {
  * Sends 400 if the cvc is invalid (ie 000).
  * Sends 201 created message after order is created.
  */
-app.post('/store', (req, res) => {
+app.post('/order', (req, res) => {
   let {user, name, address, cvc, total} = req.body;
   let cardNumber = req.body['card-number'];
   let expDate = `${req.body['exp-month']}-${req.body['exp-year']}`;
@@ -92,8 +92,8 @@ function saveOrders() {
 }
 
 // Define routes to folders used in index.html
-app.use('/assets', express.static(`${__dirname}/public/assets`));
-app.use('/bootstrap', express.static(`${__dirname}/node_modules/bootstrap/dist`));
+app.use('/assets', express.static('public/assets'));
+app.use('/bootstrap', express.static('node_modules/bootstrap/dist/css'));
 
 app.use(express.static('public'));
 const PORT = process.env.PORT || DEFAULT_PORT;
