@@ -1,5 +1,12 @@
 /**
- *
+ * Name: Justin Clayton
+ * Date: May 20, 2020
+ * Section: CSE 154 AD
+ * This is the Express API used for the backend of my CP4 webpage. It uses two
+ * JSON files to store information related to the store in the website. It uses
+ * two endpoints, /store and /order, one is a GET for all the store items and
+ * the other is a POST for a new order to be created. It uses helper functions
+ * to read and write from the JSON files using the fs promises module.
  */
 
 'use strict';
