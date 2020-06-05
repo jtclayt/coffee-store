@@ -6,7 +6,7 @@ user and the front end uses vanilla HTML, CSS, and JS as well as Bootstrap v4
 to handle user interaction.
 
 ## Install
-Pull the repo.
-npm install to install the dependencies
-npm start or nodemon app.js to start the backend
+Pull the repo.<br />
+npm install to install the dependencies<br />
+npm start or nodemon app.js to start the backend<br />
 Navigate to localhost:8080 to reach frontend
