@@ -1,7 +1,6 @@
 /**
  * Name: Justin Clayton
- * Date: May 19, 2020
- * Section: CSE 154 AD
+ * 
  * This is the main JavaScript document for the CP4 webpage and contains all
  * the logic to navigate the 'pages' on index.html. It sets all the user
  * interface buttons and navigation and loads the store items from a GET
