@@ -8,5 +8,5 @@ to handle user interaction.
 ## Install
 Pull the repo.<br />
 npm install to install the dependencies<br />
-npm start or nodemon app.js to start the backend<br />
+npm start or node app.js or nodemon app.js to start the backend<br />
 Navigate to localhost:8080 to reach frontend

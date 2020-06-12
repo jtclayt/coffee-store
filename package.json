@@ -1,7 +1,6 @@
 {
-  "name": "cp4-node-api-claytj3",
+  "name": "coffee-store",
   "version": "1.0.0",
-  "description": "For your fourth Creative Project, you will create your own Node.js web service available for use\r with AJAX and fetch. Once again, as a Creative Project, you have\r freedom to have more ownership in your work, as long as you meet the requirements listed below.",
   "main": "app.js",
   "dependencies": {
     "bootstrap": "^4.5.0",
@@ -10,7 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
